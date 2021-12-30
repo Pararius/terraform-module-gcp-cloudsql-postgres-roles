@@ -8,13 +8,26 @@ resource "random_password" "role" {
 resource "postgresql_role" "role" {
   for_each = var.roles
 
-  name     = each.key
-  login    = true
-  password = random_password.role[each.key].result
+  name                      = each.key
+  superuser                 = false
+  create_database           = false
+  create_role               = false
+  inherit                   = true
+  login                     = true
+  replication               = false
+  bypass_row_level_security = false
+  connection_limit          = -1
+  encrypted_password        = true
+  password                  = random_password.role[each.key].result
   roles = concat(
     [for database in each.value.databases_ro : "${database}_role_ro"],
     [for database in each.value.databases_rw : "${database}_role_rw"],
   )
+  search_path         = ["$user", "public"]
+  valid_until         = "infinity"
+  skip_drop_role      = false
+  skip_reassign_owned = false
+  statement_timeout   = 0
 }
 
 resource "postgresql_role" "role_ro" {
