@@ -37,7 +37,7 @@ resource "postgresql_role" "role_ro" {
   superuser                 = false
   create_database           = false
   create_role               = false
-  inherit                   = true
+  inherit                   = false
   login                     = false
   replication               = false
   bypass_row_level_security = false
@@ -84,7 +84,7 @@ resource "postgresql_role" "role_rw" {
   superuser                 = false
   create_database           = false
   create_role               = false
-  inherit                   = true
+  inherit                   = false
   login                     = false
   replication               = false
   bypass_row_level_security = false
