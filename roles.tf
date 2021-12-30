@@ -20,8 +20,8 @@ resource "postgresql_role" "role" {
 resource "postgresql_role" "role_ro" {
   for_each = local.databases
 
-  name     = "${each.value}_role_ro"
-  login    = false
+  name  = "${each.value}_role_ro"
+  login = false
 }
 
 resource "postgresql_default_privileges" "role_ro" {
@@ -50,8 +50,8 @@ resource "postgresql_grant" "role_ro" {
 resource "postgresql_role" "role_rw" {
   for_each = local.databases
 
-  name     = "${each.value}_role_rw"
-  login    = false
+  name  = "${each.value}_role_rw"
+  login = false
 }
 
 resource "postgresql_default_privileges" "role_rw" {
