@@ -7,10 +7,3 @@ terraform {
     }
   }
 }
-
-provider "postgresql" {
-  scheme   = "gcppostgres"
-  host     = var.connection_name
-  username = var.admin_username
-  password = var.admin_password
-}
