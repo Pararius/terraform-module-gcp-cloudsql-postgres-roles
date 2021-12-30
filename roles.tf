@@ -30,6 +30,17 @@ resource "postgresql_role" "role" {
   statement_timeout   = 0
 }
 
+resource "postgresql_grant" "public" {
+  for_each = local.databases
+
+  database          = each.value
+  role              = "public"
+  schema            = "public"
+  object_type       = "schema"
+  privileges        = ["CONNECT"]
+  with_grant_option = false
+}
+
 resource "postgresql_role" "role_ro" {
   for_each = local.databases
 
