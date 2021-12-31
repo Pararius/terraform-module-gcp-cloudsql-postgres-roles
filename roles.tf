@@ -44,8 +44,23 @@ resource "postgresql_grant" "public" {
 resource "postgresql_role" "role_ro" {
   for_each = local.databases
 
-  name  = "${each.value}_role_ro"
-  login = false
+  name                      = each.key
+  superuser                 = false
+  create_database           = false
+  create_role               = false
+  inherit                   = false
+  login                     = false
+  replication               = false
+  bypass_row_level_security = false
+  connection_limit          = -1
+  encrypted_password        = true
+  password                  = "not-used-as-login-is-false"
+  roles                     = []
+  search_path               = ["$user", "public"]
+  valid_until               = "infinity"
+  skip_drop_role            = false
+  skip_reassign_owned       = false
+  statement_timeout         = 0
 }
 
 resource "postgresql_default_privileges" "role_ro" {
@@ -53,8 +68,8 @@ resource "postgresql_default_privileges" "role_ro" {
     for database_writer in local.databases_writers : "${database_writer.database}.${database_writer.role}" => database_writer
   }
 
-  database    = each.value.database
   role        = postgresql_role.role_ro[each.value.database].name
+  database    = each.value.database
   owner       = each.value.role
   schema      = "public"
   object_type = "table"
@@ -64,18 +79,35 @@ resource "postgresql_default_privileges" "role_ro" {
 resource "postgresql_grant" "role_ro" {
   for_each = local.databases
 
-  database    = each.value
-  role        = postgresql_role.role_ro[each.value].name
-  schema      = "public"
-  object_type = "table"
-  privileges  = local.privileges_ro
+  role              = postgresql_role.role_ro[each.value].name
+  database          = each.value
+  schema            = "public"
+  object_type       = "table"
+  privileges        = local.privileges_ro
+  objects           = []
+  with_grant_option = false
 }
 
 resource "postgresql_role" "role_rw" {
   for_each = local.databases
 
-  name  = "${each.value}_role_rw"
-  login = false
+  name                      = each.key
+  superuser                 = false
+  create_database           = false
+  create_role               = false
+  inherit                   = false
+  login                     = false
+  replication               = false
+  bypass_row_level_security = false
+  connection_limit          = -1
+  encrypted_password        = true
+  password                  = "not-used-as-login-is-false"
+  roles                     = []
+  search_path               = ["$user", "public"]
+  valid_until               = "infinity"
+  skip_drop_role            = false
+  skip_reassign_owned       = false
+  statement_timeout         = 0
 }
 
 resource "postgresql_default_privileges" "role_rw" {
@@ -83,8 +115,8 @@ resource "postgresql_default_privileges" "role_rw" {
     for database_writer in local.databases_writers : "${database_writer.database}.${database_writer.role}" => database_writer
   }
 
-  database    = each.value.database
   role        = postgresql_role.role_rw[each.value.database].name
+  database    = each.value.database
   owner       = each.value.role
   schema      = "public"
   object_type = "table"
@@ -94,10 +126,12 @@ resource "postgresql_default_privileges" "role_rw" {
 resource "postgresql_grant" "role_rw" {
   for_each = local.databases
 
-  database    = each.value
-  role        = postgresql_role.role_rw[each.value].name
-  schema      = "public"
-  object_type = "table"
-  privileges  = local.privileges_rw
+  role              = postgresql_role.role_rw[each.value].name
+  database          = each.value
+  schema            = "public"
+  object_type       = "table"
+  privileges        = local.privileges_rw
+  objects           = []
+  with_grant_option = false
 }
 
