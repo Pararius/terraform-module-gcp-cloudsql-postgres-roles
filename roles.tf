@@ -44,7 +44,7 @@ resource "postgresql_grant" "public" {
 resource "postgresql_role" "role_ro" {
   for_each = local.databases
 
-  name                      = each.key
+  name                      = "${each.key}_role_ro"
   superuser                 = false
   create_database           = false
   create_role               = false
@@ -91,7 +91,7 @@ resource "postgresql_grant" "role_ro" {
 resource "postgresql_role" "role_rw" {
   for_each = local.databases
 
-  name                      = each.key
+  name                      = "${each.key}_role_rw"
   superuser                 = false
   create_database           = false
   create_role               = false
