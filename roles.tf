@@ -88,7 +88,7 @@ resource "postgresql_default_privileges" "role_ro" {
   privileges  = local.privileges_ro
 }
 
-resource "postgresql_grant" "role_ro" {
+resource "postgresql_grant" "role_ro_table" {
   for_each = local.databases
 
   role              = postgresql_role.role_ro[each.value].name
@@ -97,6 +97,17 @@ resource "postgresql_grant" "role_ro" {
   object_type       = "table"
   privileges        = local.privileges_ro
   objects           = []
+  with_grant_option = false
+}
+
+resource "postgresql_grant" "role_ro_schema" {
+  for_each = local.databases
+
+  role              = postgresql_role.role_ro[each.value].name
+  database          = each.value
+  schema            = "public"
+  object_type       = "schema"
+  privileges        = ["USAGE"]
   with_grant_option = false
 }
 
@@ -135,7 +146,7 @@ resource "postgresql_default_privileges" "role_rw" {
   privileges  = local.privileges_rw
 }
 
-resource "postgresql_grant" "role_rw" {
+resource "postgresql_grant" "role_rw_table" {
   for_each = local.databases
 
   role              = postgresql_role.role_rw[each.value].name
@@ -144,5 +155,16 @@ resource "postgresql_grant" "role_rw" {
   object_type       = "table"
   privileges        = local.privileges_rw
   objects           = []
+  with_grant_option = false
+}
+
+resource "postgresql_grant" "role_rw_schema" {
+  for_each = local.databases
+
+  role              = postgresql_role.role_rw[each.value].name
+  database          = each.value
+  schema            = "public"
+  object_type       = "schema"
+  privileges        = ["CREATE", "USAGE"]
   with_grant_option = false
 }
