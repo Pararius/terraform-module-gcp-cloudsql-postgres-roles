@@ -2,7 +2,7 @@ resource "random_password" "role" {
   for_each = var.roles
 
   length  = 48
-  special = false
+  special = var.password_special_chars
 }
 
 resource "postgresql_role" "role" {
@@ -134,4 +134,3 @@ resource "postgresql_grant" "role_rw" {
   objects           = []
   with_grant_option = false
 }
-

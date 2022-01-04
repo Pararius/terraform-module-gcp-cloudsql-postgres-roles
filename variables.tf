@@ -4,3 +4,8 @@ variable "roles" {
     databases_rw = list(string)
   }))
 }
+
+variable "password_special_chars" {
+  type    = bool
+  default = true
+}
