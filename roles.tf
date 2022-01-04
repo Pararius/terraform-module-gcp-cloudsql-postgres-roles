@@ -11,6 +11,10 @@ resource "random_password" "role" {
   number  = true
   special = false
   upper   = true
+
+  lifecycle {
+    ignore_changes = [lower, number, special, upper]
+  }
 }
 
 resource "postgresql_role" "role" {
