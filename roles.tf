@@ -3,7 +3,7 @@ resource "random_password" "role" {
 
   length      = 48
   min_lower   = 0
-  min_number  = 0
+  min_numeric = 0
   min_special = 0
   min_upper   = 0
 
