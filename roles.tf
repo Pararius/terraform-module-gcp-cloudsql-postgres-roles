@@ -37,7 +37,7 @@ resource "postgresql_grant" "public" {
   role              = "public"
   schema            = "public"
   object_type       = "schema"
-  privileges        = ["CONNECT"]
+  privileges        = []
   with_grant_option = false
 }
 
