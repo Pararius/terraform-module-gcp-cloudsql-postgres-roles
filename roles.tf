@@ -1,8 +1,16 @@
 resource "random_password" "role" {
   for_each = var.roles
 
-  length  = 48
-  special = var.password_special_chars
+  length      = 48
+  min_lower   = 0
+  min_number  = 0
+  min_special = 0
+  min_upper   = 0
+
+  lower   = true
+  number  = true
+  special = false
+  upper   = true
 }
 
 resource "postgresql_role" "role" {
