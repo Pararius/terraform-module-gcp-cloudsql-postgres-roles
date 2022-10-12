@@ -18,7 +18,7 @@ locals {
         database = database
       }
     ]
-  ], [
+    ], [
     for database in local.databases : {
       role     = "postgres"
       database = database
