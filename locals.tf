@@ -19,10 +19,12 @@ locals {
       }
     ]
     ], [
-    for database in local.databases : {
-      role     = "postgres"
-      database = database
-    }
+    for database in local.databases : [
+      for writer in var.legacy_writers : {
+        role     = writer
+        database = database
+      }
+    ]
   ]))
 
   privileges_ro = [
