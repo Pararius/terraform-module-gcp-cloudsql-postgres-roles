@@ -8,12 +8,12 @@ resource "random_password" "role" {
   min_upper   = 0
 
   lower   = true
-  number  = true
+  numeric = true
   special = false
   upper   = true
 
   lifecycle {
-    ignore_changes = [lower, number, special, upper]
+    ignore_changes = [lower, numeric, special, upper]
   }
 }
 
