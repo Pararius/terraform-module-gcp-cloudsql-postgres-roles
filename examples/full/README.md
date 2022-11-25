@@ -122,7 +122,7 @@ Terraform will perform the following actions:
       + min_numeric = 0
       + min_special = 0
       + min_upper   = 0
-      + number      = true
+      + numeric     = true
       + result      = (sensitive value)
       + special     = true
       + upper       = true
@@ -444,7 +444,7 @@ Terraform will perform the following actions:
       + min_numeric = 0
       + min_special = 0
       + min_upper   = 0
-      + number      = true
+      + numeric     = true
       + result      = (sensitive value)
       + special     = false
       + upper       = true
@@ -459,7 +459,7 @@ Terraform will perform the following actions:
       + min_numeric = 0
       + min_special = 0
       + min_upper   = 0
-      + number      = true
+      + numeric     = true
       + result      = (sensitive value)
       + special     = false
       + upper       = true
@@ -474,7 +474,7 @@ Terraform will perform the following actions:
       + min_numeric = 0
       + min_special = 0
       + min_upper   = 0
-      + number      = true
+      + numeric     = true
       + result      = (sensitive value)
       + special     = false
       + upper       = true
