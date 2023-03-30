@@ -5,7 +5,8 @@ variable "legacy_writers" {
 
 variable "roles" {
   type = map(object({
-    databases_ro = list(string)
-    databases_rw = list(string)
+    connection_limit = optional(number)
+    databases_ro     = list(string)
+    databases_rw     = list(string)
   }))
 }

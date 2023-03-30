@@ -28,7 +28,7 @@ resource "postgresql_role" "role" {
   login                     = true
   replication               = false
   bypass_row_level_security = false
-  connection_limit          = -1
+  connection_limit          = coalesce(each.value.connection_limit, -1)
   encrypted_password        = true
   password                  = random_password.role[each.key].result
   roles = concat(
