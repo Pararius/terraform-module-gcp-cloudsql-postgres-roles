@@ -218,3 +218,14 @@ resource "postgresql_grant" "role_rw_schema" {
   privileges        = ["CREATE", "USAGE"]
   with_grant_option = false
 }
+
+
+moved {
+  from = postgresql_default_privileges.role_ro
+  to   = postgresql_default_privileges.role_ro_table
+}
+
+moved {
+  from = postgresql_default_privileges.role_rw
+  to   = postgresql_default_privileges.role_rw_table
+}
