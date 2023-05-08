@@ -44,7 +44,6 @@ locals {
     "INSERT",
     "SELECT",
     "TRIGGER",
-    "TRUNCATE",
     "UPDATE",
   ]
 }
