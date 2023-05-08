@@ -40,10 +40,8 @@ locals {
     "UPDATE",
   ]
   privileges_rw_sequences = [
-    "DELETE",
-    "INSERT",
     "SELECT",
-    "TRIGGER",
     "UPDATE",
+    "USAGE",
   ]
 }
