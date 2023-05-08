@@ -30,10 +30,18 @@ locals {
   privileges_ro = [
     "SELECT",
   ]
-  privileges_rw = [
+  privileges_rw_tables = [
     "DELETE",
     "INSERT",
     "REFERENCES",
+    "SELECT",
+    "TRIGGER",
+    "TRUNCATE",
+    "UPDATE",
+  ]
+  privileges_rw_sequences = [
+    "DELETE",
+    "INSERT",
     "SELECT",
     "TRIGGER",
     "TRUNCATE",

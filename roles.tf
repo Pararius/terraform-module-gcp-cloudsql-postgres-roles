@@ -168,7 +168,7 @@ resource "postgresql_default_privileges" "role_rw_table" {
   owner       = each.value.role
   schema      = "public"
   object_type = "table"
-  privileges  = local.privileges_rw
+  privileges  = local.privileges_rw_tables
 }
 
 resource "postgresql_default_privileges" "role_rw_sequence" {
@@ -181,7 +181,7 @@ resource "postgresql_default_privileges" "role_rw_sequence" {
   owner       = each.value.role
   schema      = "public"
   object_type = "sequence"
-  privileges  = local.privileges_rw
+  privileges  = local.privileges_rw_sequences
 }
 
 resource "postgresql_grant" "role_rw_table" {
@@ -191,7 +191,7 @@ resource "postgresql_grant" "role_rw_table" {
   database          = each.value
   schema            = "public"
   object_type       = "table"
-  privileges        = local.privileges_rw
+  privileges        = local.privileges_rw_tables
   objects           = []
   with_grant_option = false
 }
@@ -203,7 +203,7 @@ resource "postgresql_grant" "role_rw_sequence" {
   database          = each.value
   schema            = "public"
   object_type       = "sequence"
-  privileges        = local.privileges_rw
+  privileges        = local.privileges_rw_sequences
   objects           = []
   with_grant_option = false
 }
