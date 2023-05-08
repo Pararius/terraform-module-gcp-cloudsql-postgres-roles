@@ -75,7 +75,7 @@ resource "postgresql_role" "role_ro" {
   statement_timeout         = 0
 }
 
-resource "postgresql_default_privileges" "role_ro" {
+resource "postgresql_default_privileges" "role_ro_table" {
   for_each = {
     for database_writer in local.databases_writers : "${database_writer.database}.${database_writer.role}" => database_writer
   }
@@ -88,6 +88,19 @@ resource "postgresql_default_privileges" "role_ro" {
   privileges  = local.privileges_ro
 }
 
+resource "postgresql_default_privileges" "role_ro_sequence" {
+  for_each = {
+    for database_writer in local.databases_writers : "${database_writer.database}.${database_writer.role}" => database_writer
+  }
+
+  role        = postgresql_role.role_ro[each.value.database].name
+  database    = each.value.database
+  owner       = each.value.role
+  schema      = "public"
+  object_type = "sequence"
+  privileges  = local.privileges_ro
+}
+
 resource "postgresql_grant" "role_ro_table" {
   for_each = local.databases
 
@@ -95,6 +108,18 @@ resource "postgresql_grant" "role_ro_table" {
   database          = each.value
   schema            = "public"
   object_type       = "table"
+  privileges        = local.privileges_ro
+  objects           = []
+  with_grant_option = false
+}
+
+resource "postgresql_grant" "role_ro_sequence" {
+  for_each = local.databases
+
+  role              = postgresql_role.role_ro[each.value].name
+  database          = each.value
+  schema            = "public"
+  object_type       = "sequence"
   privileges        = local.privileges_ro
   objects           = []
   with_grant_option = false
@@ -133,7 +158,7 @@ resource "postgresql_role" "role_rw" {
   statement_timeout         = 0
 }
 
-resource "postgresql_default_privileges" "role_rw" {
+resource "postgresql_default_privileges" "role_rw_table" {
   for_each = {
     for database_writer in local.databases_writers : "${database_writer.database}.${database_writer.role}" => database_writer
   }
@@ -143,7 +168,20 @@ resource "postgresql_default_privileges" "role_rw" {
   owner       = each.value.role
   schema      = "public"
   object_type = "table"
-  privileges  = local.privileges_rw
+  privileges  = local.privileges_rw_tables
+}
+
+resource "postgresql_default_privileges" "role_rw_sequence" {
+  for_each = {
+    for database_writer in local.databases_writers : "${database_writer.database}.${database_writer.role}" => database_writer
+  }
+
+  role        = postgresql_role.role_rw[each.value.database].name
+  database    = each.value.database
+  owner       = each.value.role
+  schema      = "public"
+  object_type = "sequence"
+  privileges  = local.privileges_rw_sequences
 }
 
 resource "postgresql_grant" "role_rw_table" {
@@ -153,7 +191,19 @@ resource "postgresql_grant" "role_rw_table" {
   database          = each.value
   schema            = "public"
   object_type       = "table"
-  privileges        = local.privileges_rw
+  privileges        = local.privileges_rw_tables
+  objects           = []
+  with_grant_option = false
+}
+
+resource "postgresql_grant" "role_rw_sequence" {
+  for_each = local.databases
+
+  role              = postgresql_role.role_rw[each.value].name
+  database          = each.value
+  schema            = "public"
+  object_type       = "sequence"
+  privileges        = local.privileges_rw_sequences
   objects           = []
   with_grant_option = false
 }
@@ -167,4 +217,15 @@ resource "postgresql_grant" "role_rw_schema" {
   object_type       = "schema"
   privileges        = ["CREATE", "USAGE"]
   with_grant_option = false
+}
+
+
+moved {
+  from = postgresql_default_privileges.role_ro
+  to   = postgresql_default_privileges.role_ro_table
+}
+
+moved {
+  from = postgresql_default_privileges.role_rw
+  to   = postgresql_default_privileges.role_rw_table
 }
