@@ -1,5 +1,5 @@
 resource "random_password" "role" {
-  for_each = var.roles
+  for_each = local.roles_built_in
 
   length      = 48
   min_lower   = 0
@@ -18,7 +18,7 @@ resource "random_password" "role" {
 }
 
 resource "postgresql_role" "role" {
-  for_each = var.roles
+  for_each = local.roles_built_in
 
   name                      = each.key
   superuser                 = false
@@ -73,6 +73,15 @@ resource "postgresql_role" "role_ro" {
   skip_drop_role            = false
   skip_reassign_owned       = false
   statement_timeout         = 0
+}
+
+resource "postgresql_grant_role" "role_ro" {
+  for_each = {
+    for role in local.databases_readers : "${role.database}__${role.role}" => role if role.is_iam
+  }
+
+  role       = each.value.role
+  grant_role = "${each.value.database}_role_ro"
 }
 
 resource "postgresql_default_privileges" "role_ro_table" {
@@ -158,6 +167,15 @@ resource "postgresql_role" "role_rw" {
   statement_timeout         = 0
 }
 
+resource "postgresql_grant_role" "role_rw" {
+  for_each = {
+    for role in local.databases_writers : "${role.database}__${role.role}" => role if role.is_iam
+  }
+
+  role       = each.value.role
+  grant_role = "${each.value.database}_role_rw"
+}
+
 resource "postgresql_default_privileges" "role_rw_table" {
   for_each = {
     for database_writer in local.databases_writers : "${database_writer.database}.${database_writer.role}" => database_writer
@@ -217,15 +235,4 @@ resource "postgresql_grant" "role_rw_schema" {
   object_type       = "schema"
   privileges        = ["CREATE", "USAGE"]
   with_grant_option = false
-}
-
-
-moved {
-  from = postgresql_default_privileges.role_ro
-  to   = postgresql_default_privileges.role_ro_table
-}
-
-moved {
-  from = postgresql_default_privileges.role_rw
-  to   = postgresql_default_privileges.role_rw_table
 }
